@@ -16,7 +16,7 @@ export class Form {
         if (formBody === '') return form;
         return formBody.split("&").reduce((form: Form, formPart: string) => {
             const parts = formPart.split('=');
-            return form.withFormField(parts[0], parts[1]);
+            return form.withFormField(parts[0], decodeURIComponent(parts[1]));
         }, form);
     }
 

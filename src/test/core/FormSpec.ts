@@ -53,6 +53,13 @@ describe('form', () => {
           Form.fromBodyString('url=http%3A%2F%2Fwww.google.com'),
           Form.of({url: 'http://www.google.com'})
         )
+    });
+
+    it('preserves spaces', () => {
+        deepEqual(
+          Form.fromBodyString('font=Cormorant+Garamond'),
+          Form.of({font: 'Cormorant Garamond'})
+        )
     })
 
 });

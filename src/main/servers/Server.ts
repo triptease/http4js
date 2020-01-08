@@ -8,5 +8,7 @@ export interface Http4jsServer {
 
     registerCatchAllHandler(routing: Routing): void
     start(): void
-    stop(): void
+    stop(): Promise<any>
+    isRunning(): Boolean;
+
 }

@@ -53,6 +53,14 @@ HttpClient(ReqOf(Method.GET, "http://localhost:3000/any/path"))
 
 [Full Release Notes here](https://tomshacham.github.io/http4js/Release-notes/#release-notes)
 
+### 5.0.3 Making stop return a promise in order to allow waiting for the node server to stop.
+
+### 5.0.2 
+
+### 5.0.1 
+
+### 5.0.0 Adding Handler interface to the routing layer.
+
 ### 4.2.6 `fix HttpsClient: post body`
 
 ### 4.2.4 `res.fullBodyString() for bodies > 65kb`

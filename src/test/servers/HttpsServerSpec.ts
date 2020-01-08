@@ -14,19 +14,16 @@ describe('https server', () => {
         ca: fs.readFileSync('src/ssl/my-root-ca.cert.pem'),
     };
 
-    const httpsServer = get('/', async() => ResOf(200, 'hello, world!'))
+    let internalServer = HttpsServer(8000, certs);
+    const routing = get('/', async() => ResOf(200, 'hello, world!'))
         .withPost('/', async() => ResOf(200, 'hello, world!'))
-        .asServer(HttpsServer(8000, certs));
+        .asServer(internalServer);
 
     before(() => {
         require('ssl-root-cas')
             .inject()
             .addFile('src/ssl/my-root-ca.cert.pem');
-        httpsServer.start();
-    });
-
-    after(() => {
-        httpsServer.stop();
+        routing.start();
     });
 
     it('serves a get request', async() => {
@@ -41,4 +38,13 @@ describe('https server', () => {
         equal(response.bodyString(), 'hello, world!');
     });
 
+    it('should wait for server to stop', async () => {
+        const runningBefore = internalServer.isRunning();
+        equal(runningBefore, true);
+
+        await routing.stop();
+
+        const runningAfter = internalServer.isRunning();
+        equal(runningAfter, false);
+    });
 });

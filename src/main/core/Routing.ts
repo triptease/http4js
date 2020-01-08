@@ -71,9 +71,15 @@ export class Routing {
     this.server.start();
   }
 
-  stop(): void {
+  async stop(): Promise<any> {
     if (!this.server) throw new Error('No server...');
-    this.server.stop();
+    await this.server.stop();
+    return;
+  }
+
+  isRunning(): Boolean {
+    if (!this.server) return false;
+    return this.server.isRunning()
   }
 
   async serveE2E(req: Req): Promise<Res> {
@@ -192,7 +198,6 @@ export class Routing {
     return JSON.stringify(req.headers) === JSON.stringify(it.headers)
       || JSON.stringify(it.headers) === JSON.stringify({});
   }
-
 }
 
 export function routes(method: string, path: string, handler: HttpHandler | Handler, headers: HeadersJson = {}, name?: string): Routing {

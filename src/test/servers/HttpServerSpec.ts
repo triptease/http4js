@@ -41,10 +41,6 @@ describe("native node over the wire", () => {
         server.start();
     });
 
-    after(() => {
-        server.stop();
-    });
-
     it("sets post body", async() => {
         const request = ReqOf("POST", `${baseUrl}/post-body`, "my humps");
         const response = await HttpClient(request);
@@ -166,6 +162,28 @@ describe("native node over the wire", () => {
             equal(response.bodyString(), "Done a TRACE request init?");
         });
 
-    })
+    });
 
+    describe('stopping the server', () => {
+        it('should wait for server to stop', async () => {
+            const runningBefore = server.isRunning();
+            equal(runningBefore, true);
+
+            await server.stop();
+
+            const runningAfter = server.isRunning();
+            equal(runningAfter, false);
+        });
+
+        it('should not be running if not configured as a server', async () => {
+            const nonConfiguredServer = get("/", async(req) => {
+                const query = req.query("tomQuery") as string;
+                return ResOf(200, req.bodyString())
+                  .withHeaders(req.headers)
+                  .withHeader("tomQuery", query || "no tom query");
+            });
+            equal(nonConfiguredServer.isRunning(), false);
+
+        })
+    });
 });

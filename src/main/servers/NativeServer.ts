@@ -58,7 +58,7 @@ export class NativeServer implements Http4jsServer {
 
     async stop(): Promise<any> {
         return new Promise((res, rej) => {
-            this.server.close((err: Error) => {
+            this.server.close((err?: Error) => {
                 if (err) {
                     rej(err);
                 } else {

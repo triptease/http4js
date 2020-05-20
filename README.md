@@ -33,10 +33,10 @@ const routing = routes('GET', ".*", async (req: Req) => {
 
 //add csrf token header to every request and vary gzip to every response
 const headerFilter = (handler: HttpHandler) => {
-    return async (req: Req) => {
+    return asHandler(async (req: Req) => {
         const response = await handler(req.withHeader(Headers.X_CSRF_TOKEN, Math.random()))
         return response.withHeader(Headers.VARY, "gzip");
-    }
+    })
 };
 
 // start routing as a NativeHttpServer on port 3000
@@ -45,17 +45,23 @@ routing
     .asServer(HttpServer(3000))
     .start();
 
-// make an http request to our server and log the response
-HttpClient(ReqOf(Method.GET, "http://localhost:3000/any/path"))
+// make an http request to a server and log the response
+HttpClient(ReqOf(Method.GET, "http://httpbin.org/get")).then(res => console.log(res))
+
+// make an http or https request and log the response
+const client = new HttpClientHandler()
+client.handle(ReqOf(Method.GET, "http://httpbin.org/get")).then(res => console.log(res))
+client.handle(ReqOf(Method.GET, "https://httpbin.org/get")).then(res => console.log(res))
+
 ```
 
 ## Latest features
 
 [Full Release Notes here](https://tomshacham.github.io/http4js/Release-notes/#release-notes)
 
-### 5.0.5 Rerelease
+### 5.0.5 Re-publish to fix failed npm publish
 
-### 5.0.4 Fix type error on stop()
+### 5.0.4 [Unpublished] Fix type error on stop()
 
 ### 5.0.3 Making stop() return a promise in order to allow waiting for the node server to stop.
 

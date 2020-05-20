@@ -59,9 +59,9 @@ HttpClient(ReqOf(Method.GET, "http://localhost:3000/any/path"))
 
 ### 5.0.3 Making stop() return a promise in order to allow waiting for the node server to stop.
 
-### 5.0.2 
+### 5.0.2 Handling '+' characters on form values. Moving repo to organisation.
 
-### 5.0.1 
+### 5.0.1 Decoding values on Forms
 
 ### 5.0.0 Adding Handler interface to the routing layer.
 

@@ -53,6 +53,8 @@ HttpClient(ReqOf(Method.GET, "http://localhost:3000/any/path"))
 
 [Full Release Notes here](https://tomshacham.github.io/http4js/Release-notes/#release-notes)
 
+### 5.0.5 Rerelease
+
 ### 5.0.4 Fix type error on stop()
 
 ### 5.0.3 Making stop() return a promise in order to allow waiting for the node server to stop.

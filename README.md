@@ -59,6 +59,8 @@ client.handle(ReqOf(Method.GET, "https://httpbin.org/get")).then(res => console.
 
 [Full Release Notes here](https://tomshacham.github.io/http4js/Release-notes/#release-notes)
 
+### 5.0.6 Dependency update
+
 ### 5.0.5 Re-publish to fix failed npm publish
 
 ### 5.0.4 [Unpublished] Fix type error on stop()

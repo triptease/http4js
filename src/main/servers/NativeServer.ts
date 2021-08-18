@@ -56,8 +56,8 @@ export class NativeServer implements Http4jsServer {
         this.server.listen(this.port);
     }
 
-    async stop(): Promise<any> {
-        return new Promise((res, rej) => {
+    async stop(): Promise<void> {
+        return new Promise<void>((res, rej) => {
             this.server.close((err?: Error) => {
                 if (err) {
                     rej(err);

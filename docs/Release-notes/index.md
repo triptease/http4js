@@ -6,6 +6,8 @@
 
 # Release notes
 
+### 5.0.7 `Specify void return on server.stop()`
+
 ### 5.0.6 `Update dependencies`
 
 ### 4.2.6 `fix HttpsClient: post body`

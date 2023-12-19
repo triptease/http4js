@@ -1,18 +1,17 @@
-import {equal} from "assert";
-import {Uri} from "../../main/core/Uri";
-import {notEqual} from "assert";
-import {deepEqual} from "assert";
+import {deepStrictEqual, notStrictEqual} from "assert";
+import {Uri} from "../../main";
+import {strictEqual} from "node:assert";
 
 describe("uri", () => {
 
     it("encodes uris", () => {
-        equal(
+        strictEqual(
             Uri.of("/tom/is the sugar/goodness").path(),
             "/tom/is%20the%20sugar/goodness");
     });
 
     it("extracts path params", () => {
-        equal(Uri.of("/tom/{is}/goodness")
+        strictEqual(Uri.of("/tom/{is}/goodness")
                 .extract("/tom/the sugar/goodness")
             .pathParam("is"),
             "the sugar")
@@ -33,57 +32,57 @@ describe("uri", () => {
         ];
 
         for (const [special, encoded] of specialCharacters) {
-            equal(uri.extract(`/tom/foo${encoded}`).pathParam('is'), `foo${special}`);
+            strictEqual(uri.extract(`/tom/foo${encoded}`).pathParam('is'), `foo${special}`);
         }
     });
 
     it("matches paths", () => {
-        equal(Uri.of("/tom/is the sugar/goodness/gracious/me")
+        strictEqual(Uri.of("/tom/is the sugar/goodness/gracious/me")
                 .templateMatch("/tom/{is}/goodness"),
             true)
     });
 
     it("matches false when paths different", () => {
-        equal(Uri.of("/tom/{is}/goodness")
+        strictEqual(Uri.of("/tom/{is}/goodness")
                 .templateMatch("/tom/is/badness"),
             false)
     });
 
     it("parses out the path from uri string", () => {
-        equal(
+        strictEqual(
             Uri.of("http://localhost:3000/").path(),
             "/");
-        equal(
+        strictEqual(
             Uri.of("http://localhost:3000/tom/is the hot sauce/guy").path(),
             "/tom/is%20the%20hot%20sauce/guy");
     });
 
     it("parses out the protocol from uri string", () => {
-        equal(
+        strictEqual(
             Uri.of("http://localhost:3000/").protocol(),
             "http");
     });
 
     it("parses out the query from uri string", () => {
-        equal(
+        strictEqual(
             Uri.of("http://localhost:3000/?tom=foo&ben=bar").queryString(),
             "tom=foo&ben=bar");
     });
 
     it("parses out the hostname from uri string", () => {
-        equal(
+        strictEqual(
             Uri.of("http://localhost:3000/?tom=foo&ben=bar").hostname(),
             "localhost");
     });
 
     it("parses out the port from uri string", () => {
-        equal(
+        strictEqual(
             Uri.of("http://localhost:3000/?tom=foo&ben=bar").port(),
             "3000");
     });
 
     it("parses out the auth from uri string", () => {
-        equal(
+        strictEqual(
             Uri.of("http://tom:tom1@localhost:3000/?tom=foo&ben=bar").auth(),
             "tom:tom1");
     });
@@ -91,50 +90,50 @@ describe("uri", () => {
     it("gives you a new Uri with new path", () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withPath("/tosh");
-        notEqual(initial, newPath);
-        equal(newPath.asUriString(), "http://localhost:3000/tosh?tom=foo&ben=bar")
+        notStrictEqual(initial, newPath);
+        strictEqual(newPath.asUriString(), "http://localhost:3000/tosh?tom=foo&ben=bar")
     });
 
     it("gives you a new Uri with new protocol", () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withProtocol("https");
-        notEqual(initial, newPath);
-        equal(newPath.asUriString(), "https://localhost:3000/?tom=foo&ben=bar")
+        notStrictEqual(initial, newPath);
+        strictEqual(newPath.asUriString(), "https://localhost:3000/?tom=foo&ben=bar")
     });
 
     it("gives you a new Uri with new query", () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withQuery("bosh", "NYC");
-        notEqual(initial, newPath);
-        equal(newPath.asUriString(), "http://localhost:3000/?tom=foo&ben=bar&bosh=NYC")
+        notStrictEqual(initial, newPath);
+        strictEqual(newPath.asUriString(), "http://localhost:3000/?tom=foo&ben=bar&bosh=NYC")
     });
 
     it('accumulates queries', () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withQuery("ben", "NYC");
-        equal(newPath.asUriString(), "http://localhost:3000/?tom=foo&ben=bar&ben=NYC");
-        deepEqual(newPath.queryParams(), {tom: 'foo', ben: ['bar', 'NYC']});
+        strictEqual(newPath.asUriString(), "http://localhost:3000/?tom=foo&ben=bar&ben=NYC");
+        deepStrictEqual(newPath.queryParams(), {tom: 'foo', ben: ['bar', 'NYC']});
     });
 
     it("gives you a new Uri with new hostname", () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withHostname("focalhost");
-        notEqual(initial, newPath);
-        equal(newPath.asUriString(), "http://focalhost:3000/?tom=foo&ben=bar")
+        notStrictEqual(initial, newPath);
+        strictEqual(newPath.asUriString(), "http://focalhost:3000/?tom=foo&ben=bar")
     });
 
     it("gives you a new Uri with new port", () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withPort(3001);
-        notEqual(initial, newPath);
-        equal(newPath.asUriString(), "http://localhost:3001/?tom=foo&ben=bar")
+        notStrictEqual(initial, newPath);
+        strictEqual(newPath.asUriString(), "http://localhost:3001/?tom=foo&ben=bar")
     });
 
     it("gives you a new Uri with new auth", () => {
         const initial = Uri.of("http://localhost:3000/?tom=foo&ben=bar");
         const newPath = initial.withAuth("tom", "password");
-        notEqual(initial, newPath);
-        equal(newPath.asUriString(), "http://tom:password@localhost:3000/?tom=foo&ben=bar")
+        notStrictEqual(initial, newPath);
+        strictEqual(newPath.asUriString(), "http://tom:password@localhost:3000/?tom=foo&ben=bar")
     });
 
 });

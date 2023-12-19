@@ -1,9 +1,8 @@
-import {ResOf, get, Req, ReqOf, Headers, HttpClient, Filters, asHandler} from '../../main';
-import {Client} from "../../main/client/Client";
-import {deepEqual, equal} from "assert";
-import {HttpServer} from "../../main/servers/NativeServer";
+import {asHandler, Client, Filters, get, Headers, HttpClient, HttpServer, Req, ReqOf, ResOf} from '../../main';
+import {deepStrictEqual} from "assert";
 import {Readable} from "stream";
 import * as zlib from "zlib";
+import {strictEqual} from "node:assert";
 
 describe('client', () => {
   const server = get('/', async (req: Req) => ResOf(200, JSON.stringify(req.headers)))
@@ -32,11 +31,11 @@ describe('client', () => {
     const res = await zipkinClient(ReqOf('GET', baseUrl));
     const requestHeaders = JSON.parse(res.bodyString());
 
-    equal(requestHeaders['x-b3-parentspanid'], zipkinHeaders['x-b3-parentspanid']);
-    equal(requestHeaders['x-b3-spanid'], zipkinHeaders['x-b3-spanid']);
-    equal(requestHeaders['x-b3-traceid'], zipkinHeaders['x-b3-traceid']);
-    equal(requestHeaders['x-b3-sampled'], zipkinHeaders['x-b3-sampled']);
-    equal(requestHeaders['x-b3-debug'], zipkinHeaders['x-b3-debug']);
+    strictEqual(requestHeaders['x-b3-parentspanid'], zipkinHeaders['x-b3-parentspanid']);
+    strictEqual(requestHeaders['x-b3-spanid'], zipkinHeaders['x-b3-spanid']);
+    strictEqual(requestHeaders['x-b3-traceid'], zipkinHeaders['x-b3-traceid']);
+    strictEqual(requestHeaders['x-b3-sampled'], zipkinHeaders['x-b3-sampled']);
+    strictEqual(requestHeaders['x-b3-debug'], zipkinHeaders['x-b3-debug']);
   });
 
   it('ungzipped body', async () => {
@@ -50,7 +49,7 @@ describe('client', () => {
     const gzippedReq = ReqOf("POST", `${baseUrl}/gzip`).withBody(gzippedBody).withHeader(Headers.CONTENT_ENCODING, 'gzip');
     const response = await Filters.GZIP(asHandler(HttpClient)).handle(gzippedReq);
 
-    deepEqual(response.bodyString(), 'ungzipped response')
+    deepStrictEqual(response.bodyString(), 'ungzipped response')
   });
 
 });

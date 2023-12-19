@@ -1,6 +1,7 @@
-import {deepEqual, equal, notEqual} from "assert";
-import {Res, ResOf} from "../../main/core/Res";
+import {deepStrictEqual, notStrictEqual} from "assert";
+import {Res, ResOf} from "../../main";
 import {Readable} from "stream";
+import {strictEqual} from "node:assert";
 
 describe("in mem response", () => {
 
@@ -8,11 +9,11 @@ describe("in mem response", () => {
         const response1 = new Res(200, "OK");
         const response2 = response1.withHeader("tom", "tosh");
 
-        notEqual(response1, response2);
+        notStrictEqual(response1, response2);
     });
 
     it("set body", () => {
-        equal(
+        strictEqual(
             new Res()
                 .withBody("body boy")
                 .bodyString(),
@@ -20,7 +21,7 @@ describe("in mem response", () => {
     });
 
     it("set body string", () => {
-        equal(
+        strictEqual(
             new Res()
                 .withBody("body boy-o")
                 .bodyString(),
@@ -31,7 +32,7 @@ describe("in mem response", () => {
         const readable = new Readable({read(){}});
         readable.push('some body');
         readable.push(null);
-        equal(
+        strictEqual(
             ResOf(200)
                 .withBody(readable)
                 .bodyStream(),
@@ -44,13 +45,13 @@ describe("in mem response", () => {
         readable.push('some body');
         readable.push(null);
         const reqWithStreamBody = ResOf(200).withBody(readable);
-        equal(reqWithStreamBody.bodyString(), 'some body');
-        equal(reqWithStreamBody.bodyString(), 'some body'); // read multiple times
+        strictEqual(reqWithStreamBody.bodyString(), 'some body');
+        strictEqual(reqWithStreamBody.bodyString(), 'some body'); // read multiple times
     });
 
 
     it("set header on response", () => {
-        equal(
+        strictEqual(
             new Res()
                 .withHeader("tom", "smells")
                 .header("tom"),
@@ -58,7 +59,7 @@ describe("in mem response", () => {
     });
 
     it("concat same header on response", () => {
-        deepEqual(
+        deepStrictEqual(
             new Res()
                 .withHeader("tom", "smells")
                 .withHeader("tom", "smells more")
@@ -68,7 +69,7 @@ describe("in mem response", () => {
     });
 
     it('replace header', () => {
-        equal(
+        strictEqual(
             new Res()
                 .withHeader("tom", "smells")
                 .replaceHeader("tom", "is nice")
@@ -77,7 +78,7 @@ describe("in mem response", () => {
     });
 
     it('remove header', () => {
-        equal(
+        strictEqual(
             new Res()
                 .withHeader("tom", "smells")
                 .removeHeader("tom")
@@ -86,14 +87,14 @@ describe("in mem response", () => {
     });
 
     it("can set body with just a string or a Body" , () => {
-        equal(
+        strictEqual(
             new Res(200, "some string made into a Body")
                 .bodyString(),
             "some string made into a Body")
     });
 
     it("Redirect is sugar for Res withHeader Location", () => {
-        equal(Res.Redirect(302, "/tosh").header("Location"),
+        strictEqual(Res.Redirect(302, "/tosh").header("Location"),
             "/tosh"
         )
     })

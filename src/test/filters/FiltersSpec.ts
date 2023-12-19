@@ -1,23 +1,19 @@
-import {routes, get} from "../../main/core/Routing";
-import {debugFilterBuilder, Filters} from "../../main/core/Filters";
-import {equal} from "assert";
-import {ResOf} from "../../main/core/Res";
-import {ReqOf, Req} from "../../main/core/Req";
-import {HttpServer} from "../../main/servers/NativeServer";
+import {debugFilterBuilder, Filters, get, Headers, HttpServer, Req, ReqOf, ResOf, routes} from "../../main";
 import * as zlib from 'zlib';
 import * as fs from 'fs';
+import {strictEqual} from "node:assert";
+
 const { Readable } = require('stream');
-import {Headers} from "../../main";
 
 describe("Built in filters", () => {
 
     it("upgrade to https", async() => {
-        const server = get('/', async(req: Req) => ResOf(200, 'OK'))
+        const server = get('/', async(_req: Req) => ResOf(200, 'OK'))
             .withFilter(Filters.UPGRADE_TO_HTTPS)
             .asServer(HttpServer(3030));
         const response = await server.serveE2E(ReqOf('GET', '/'));
 
-        equal(response.header('Location'), "https://localhost:3030/");
+        strictEqual(response.header('Location'), "https://localhost:3030/");
     });
 
     it("timing filter", async() => {
@@ -31,11 +27,11 @@ describe("Built in filters", () => {
         const endTimeBefore = parseInt(response.header("End-Time")) < (new Date).getTime() + 10;
         const requestTook10ms = parseInt(response.header("Total-Time")) < 10;
 
-        equal(startTimeAfter, true);
-        equal(startTimeBefore, true);
-        equal(endTimeAfter, true);
-        equal(endTimeBefore, true);
-        equal(requestTook10ms, true);
+        strictEqual(startTimeAfter, true);
+        strictEqual(startTimeBefore, true);
+        strictEqual(endTimeAfter, true);
+        strictEqual(endTimeBefore, true);
+        strictEqual(requestTook10ms, true);
     });
 
     it("debugging filter", async() => {
@@ -50,7 +46,8 @@ describe("Built in filters", () => {
             .withFilter(debugFilterBuilder(logger))
             .serve(ReqOf("GET", "/"));
 
-        equal(logger.messages[0], 'GET to / gave status 200 with headers {}');
+        strictEqual(response.status, 200)
+        strictEqual(logger.messages[0], 'GET to / gave status 200 with headers {}');
     });
 
     it("gzip filter", async ()=> {
@@ -75,7 +72,7 @@ describe("Built in filters", () => {
       await new Promise(res => setTimeout(() => res(), 100));
       const message = fs.readFileSync('./foo', 'utf-8');
 
-      equal(message, 'ungzipped response');
+      strictEqual(message, 'ungzipped response');
       removeFile('./foo');
     })
 

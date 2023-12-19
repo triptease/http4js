@@ -1,8 +1,8 @@
 import * as assert from 'assert';
-import {deepEqual, equal, notEqual} from 'assert';
-import {Headers, HeaderValues} from '../../main/core/Headers';
-import {ReqOf} from '../../main';
+import {deepStrictEqual, notStrictEqual} from 'assert';
+import {Headers, HeaderValues, ReqOf} from '../../main';
 import {Readable} from "stream";
+import {strictEqual} from "node:assert";
 
 describe('in mem request', () => {
 
@@ -10,18 +10,18 @@ describe('in mem request', () => {
         const request1 = ReqOf('GET', '/');
         const request2 = request1.withHeader('tom', 'tosh');
 
-        notEqual(request1, request2);
+        notStrictEqual(request1, request2);
     });
 
     it('set method is case insensitive', () => {
-        equal(
+        strictEqual(
             ReqOf('gEt', '/')
                 .method,
             'GET')
     });
 
     it('set uri', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/')
                 .withUri('/tom')
                 .uri
@@ -30,7 +30,7 @@ describe('in mem request', () => {
     });
 
     it('set plain body', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/')
                 .withBody('body boy')
                 .bodyString(),
@@ -38,7 +38,7 @@ describe('in mem request', () => {
     });
 
     it('sets form field body on post', () => {
-        deepEqual(
+        deepStrictEqual(
             ReqOf('POST', '/')
                 .withFormField('name', 'tosh')
                 .bodyForm(),
@@ -50,7 +50,7 @@ describe('in mem request', () => {
         const formRequest = ReqOf('POST', '/')
             .withFormField('name', 'tosh')
             .withFormField('age', '27');
-        equal(formRequest.bodyString(), 'name=tosh&age=27');
+        strictEqual(formRequest.bodyString(), 'name=tosh&age=27');
     });
 
     it('multiple same form fields lists all values', () => {
@@ -58,24 +58,24 @@ describe('in mem request', () => {
             .withFormField('name', 'tosh')
             .withFormField('name', 'bosh')
             .withFormField('name', 'losh');
-        equal(formRequest.bodyString(), 'name=tosh&name=bosh&name=losh');
+        strictEqual(formRequest.bodyString(), 'name=tosh&name=bosh&name=losh');
     });
 
     it('merges many forms', () => {
         const formRequest = ReqOf('POST', '/')
             .withForm({name: 'tosh', age: '27'})
             .withForm({name: 'bosh', age: '31'});
-        equal(formRequest.bodyString(), 'name=tosh&name=bosh&age=27&age=31');
+        strictEqual(formRequest.bodyString(), 'name=tosh&name=bosh&age=27&age=31');
     });
 
     it('gives form field as list of strings', () => {
         const formRequest = ReqOf('POST', '/')
             .withFormField('name', ['tosh', 'bosh']);
-        equal(formRequest.bodyString(), 'name=tosh&name=bosh');
+        strictEqual(formRequest.bodyString(), 'name=tosh&name=bosh');
     });
 
     it('sets all form on post', () => {
-        deepEqual(
+        deepStrictEqual(
             ReqOf('POST', '/')
                 .withForm({name: ['tosh', 'bosh'], age: '27'})
                 .withHeader(Headers.CONTENT_TYPE, HeaderValues.FORM)
@@ -89,7 +89,7 @@ describe('in mem request', () => {
             .withForm({name: ['tosh', 'bosh'], age: '27'});
         const req2 = req
             .withFormField('name', 'tosh');
-        equal(
+        strictEqual(
             req2
                 .header(Headers.CONTENT_TYPE),
             HeaderValues.FORM
@@ -97,7 +97,7 @@ describe('in mem request', () => {
     });
 
     it('overrides form encoded header if content type header already set', () => {
-        equal(
+        strictEqual(
             ReqOf('POST', '/')
                 .withHeader(Headers.CONTENT_TYPE, HeaderValues.MULTIPART_FORMDATA)
                 .withForm({name: ['tosh', 'bosh'], age: '27'})
@@ -107,7 +107,7 @@ describe('in mem request', () => {
     });
 
     it('set body string', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/')
                 .withBody('tommy boy')
                 .bodyString(),
@@ -121,7 +121,7 @@ describe('in mem request', () => {
         });
         readable.push('some body');
         readable.push(null);
-        equal(
+        strictEqual(
             ReqOf('GET', '/')
                 .withBody(readable)
                 .bodyStream(),
@@ -137,12 +137,12 @@ describe('in mem request', () => {
         readable.push('some body');
         readable.push(null);
         const reqWithStreamBody = ReqOf('GET', '/').withBody(readable);
-        equal(reqWithStreamBody.bodyString(), 'some body');
-        equal(reqWithStreamBody.bodyString(), 'some body'); // read multiple times
+        strictEqual(reqWithStreamBody.bodyString(), 'some body');
+        strictEqual(reqWithStreamBody.bodyString(), 'some body'); // read multiple times
     });
 
     it('sets query string', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/tom')
                 .withQuery('tom', 'tosh')
                 .withQuery('ben', 'bosh')
@@ -156,13 +156,13 @@ describe('in mem request', () => {
             .withQuery('tom', 'tosh%20eroo')
             .withQuery('ben', 'bosh%2Aeroo');
 
-        equal(req.query('tom'), 'tosh eroo');
-        equal(req.query('ben'), 'bosh*eroo');
+        strictEqual(req.query('tom'), 'tosh eroo');
+        strictEqual(req.query('ben'), 'bosh*eroo');
     });
 
 
     it('sets query string using object of key-values', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/tom')
                 .withQueries({tom: 'tosh', ben: 'bosh'})
                 .uri
@@ -171,7 +171,7 @@ describe('in mem request', () => {
     });
 
     it('sets query strings chained with url encoding', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/edoid')
                 .withQuery('standard', 'standard')
                 .withQuery('requiresEncoding', '=')
@@ -181,7 +181,7 @@ describe('in mem request', () => {
     })
 
     it('sets multiple query strings at once with url encoding', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/edoid')
                 .withQueries({
                     standard: 'standard',
@@ -193,7 +193,7 @@ describe('in mem request', () => {
     })
 
     it('does not re-encode URL encoded query parameters', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', '/edoid')
                 .withQueries({
                     doesNotNeedReEncoding: encodeURI('='),
@@ -206,11 +206,11 @@ describe('in mem request', () => {
     it('extracts query params', async () => {
         const req = ReqOf('GET', '/test?tosh=rocks&bosh=pwns&losh=killer');
 
-        deepEqual(req.queries, {tosh: 'rocks', bosh: 'pwns', losh: 'killer'});
+        deepStrictEqual(req.queries, {tosh: 'rocks', bosh: 'pwns', losh: 'killer'});
     });
 
     it('get header is case insensitive', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', 'some/url')
                 .withHeader('TOM', 'rocks')
                 .header('tom'),
@@ -218,7 +218,7 @@ describe('in mem request', () => {
     });
 
     it('set header on request', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', 'some/url')
                 .withHeader('tom', 'smells')
                 .header('tom'),
@@ -226,7 +226,7 @@ describe('in mem request', () => {
     });
 
     it('concat same header on request', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
             ReqOf('GET', 'some/url')
                 .withHeader('tom', 'smells')
                 .withHeader('tom', 'smells more')
@@ -236,7 +236,7 @@ describe('in mem request', () => {
     });
 
     it('replace header', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', 'some/url')
                 .withHeader('tom', 'smells')
                 .replaceHeader('tom', 'is nice')
@@ -245,7 +245,7 @@ describe('in mem request', () => {
     });
 
     it('remove header', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', 'some/url')
                 .withHeader('tom', 'smells')
                 .removeHeader('tom')
@@ -256,20 +256,20 @@ describe('in mem request', () => {
     it('extracts path param', async () => {
         const req = ReqOf('GET', '/tom-param/test').withPathParamsFromTemplate('/{name}/test');
 
-        equal(req.pathParams.name, 'tom-param');
+        strictEqual(req.pathParams.name, 'tom-param');
     });
 
     it('extracts multiple path params', async () => {
         const req = ReqOf('GET', '/tom/test/27/bob/180/fred')
             .withPathParamsFromTemplate('/{name}/test/{age}/bob/{height}/fred');
 
-        equal(req.pathParams.name, 'tom');
-        equal(req.pathParams.age, '27');
-        equal(req.pathParams.height, '180');
+        strictEqual(req.pathParams.name, 'tom');
+        strictEqual(req.pathParams.age, '27');
+        strictEqual(req.pathParams.height, '180');
     });
 
     it('gives value malformed uri component if query is malformed', () => {
-        equal(
+        strictEqual(
             ReqOf('GET', 'some/url?tosh=a%20b%20c%20%20^%20*%20%%20$%20%C2%A3')
                 .query('tosh'),
             'Malformed URI component');

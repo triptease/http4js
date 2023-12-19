@@ -1,10 +1,6 @@
 import * as fs from "fs";
-import {equal} from "assert";
-import {HttpsClient} from "../../main/client/HttpsClient";
-import {get} from "../../main/core/Routing";
-import {ResOf} from "../../main/core/Res";
-import {ReqOf} from "../../main/core/Req";
-import {HttpsServer} from "../../main/servers/NativeServer";
+import {get, HttpsClient, HttpsServer, ReqOf, ResOf} from "../../main";
+import {strictEqual} from "node:assert";
 
 describe('https server', () => {
 
@@ -28,23 +24,23 @@ describe('https server', () => {
 
     it('serves a get request', async() => {
         const response = await HttpsClient(ReqOf('GET', 'https://localhost:8000/'));
-        equal(response.status, 200);
-        equal(response.bodyString(), 'hello, world!');
+        strictEqual(response.status, 200);
+        strictEqual(response.bodyString(), 'hello, world!');
     });
 
     it('serves a post request', async() => {
         const response = await HttpsClient(ReqOf('POST', 'https://localhost:8000/'));
-        equal(response.status, 200);
-        equal(response.bodyString(), 'hello, world!');
+        strictEqual(response.status, 200);
+        strictEqual(response.bodyString(), 'hello, world!');
     });
 
     it('should wait for server to stop', async () => {
         const runningBefore = internalServer.isRunning();
-        equal(runningBefore, true);
+        strictEqual(runningBefore, true);
 
         await routing.stop();
 
         const runningAfter = internalServer.isRunning();
-        equal(runningAfter, false);
+        strictEqual(runningAfter, false);
     });
 });

@@ -1,16 +1,26 @@
-import {get} from '../../main/core/Routing';
-import {Filter, zipkinFilterBuilder} from '../../main/core/Filters';
-import {deepEqual, equal} from 'assert';
-import {ResOf} from '../../main/core/Res';
-import {Req, ReqOf} from '../../main/core/Req';
-import {HttpClient} from '../../main/client/HttpClient';
-import {Client} from '../../main/client/Client';
-import {ZipkinCollector, ZipkinHeaders, ZipkinSpan} from '../../main/zipkin/Zipkin';
+import {
+    asHandler,
+    Client,
+    Filter,
+    get,
+    Handler,
+    HttpClient,
+    HttpHandler,
+    HttpServer,
+    Req,
+    ReqOf,
+    ResOf,
+    timingFilterBuilder,
+    ZipkinCollector,
+    zipkinFilterBuilder,
+    ZipkinHeaders,
+    ZipkinSpan
+} from '../../main';
+import {deepStrictEqual} from 'assert';
 import {isNullOrUndefined} from 'util';
-import {asHandler, Handler, HttpHandler, timingFilterBuilder} from '../../main';
 import {FakeClock} from '../clock/FakeClock';
 import {DeterministicIdGenerator} from './DeterministicIdGenerator';
-import {HttpServer} from '../../main/servers/NativeServer';
+import {strictEqual} from "node:assert";
 
 const upstream1BaseUrl = 'http://localhost:3032';
 const upstream2BaseUrl = 'http://localhost:3033';
@@ -98,22 +108,22 @@ describe('Zipkin', () => {
         };
 
         // parent span ids
-        equal(responseHeaders.parent['x-b3-parentspanid'], undefined);
-        equal(responseHeaders.upstream1['x-b3-parentspanid'], '1');
-        equal(responseHeaders.upstream2['x-b3-parentspanid'], '1');
-        equal(responseHeaders.moreUpstream['x-b3-parentspanid'], '4');
+        strictEqual(responseHeaders.parent['x-b3-parentspanid'], undefined);
+        strictEqual(responseHeaders.upstream1['x-b3-parentspanid'], '1');
+        strictEqual(responseHeaders.upstream2['x-b3-parentspanid'], '1');
+        strictEqual(responseHeaders.moreUpstream['x-b3-parentspanid'], '4');
 
         // span id is different
-        equal(responseHeaders.parent['x-b3-spanid'], '1');
-        equal(responseHeaders.upstream1['x-b3-spanid'], '3');
-        equal(responseHeaders.upstream2['x-b3-spanid'], '4');
-        equal(responseHeaders.moreUpstream['x-b3-spanid'], '5');
+        strictEqual(responseHeaders.parent['x-b3-spanid'], '1');
+        strictEqual(responseHeaders.upstream1['x-b3-spanid'], '3');
+        strictEqual(responseHeaders.upstream2['x-b3-spanid'], '4');
+        strictEqual(responseHeaders.moreUpstream['x-b3-spanid'], '5');
 
         // trace id is maintained
-        equal(responseHeaders.parent['x-b3-traceid'], '2');
-        equal(responseHeaders.upstream1['x-b3-traceid'], '2');
-        equal(responseHeaders.upstream2['x-b3-traceid'], '2');
-        equal(responseHeaders.moreUpstream['x-b3-traceid'], '2');
+        strictEqual(responseHeaders.parent['x-b3-traceid'], '2');
+        strictEqual(responseHeaders.upstream1['x-b3-traceid'], '2');
+        strictEqual(responseHeaders.upstream2['x-b3-traceid'], '2');
+        strictEqual(responseHeaders.moreUpstream['x-b3-traceid'], '2');
     });
 
     it('timed zipkin filter', async() => {
@@ -121,10 +131,10 @@ describe('Zipkin', () => {
             .withFilter(deterministicZipkinFilter)
             .withFilter(deterministicTimingFilter)
             .serve(ReqOf('GET', '/'));
-        equal(response.header('x-b3-spanid'), 7);
-        equal(response.header('x-b3-traceid'), 8);
-        equal(!isNullOrUndefined(response.header('start-time')), true);
-        equal(!isNullOrUndefined(response.header('end-time')), true);
+        strictEqual(response.header('x-b3-spanid'), '7');
+        strictEqual(response.header('x-b3-traceid'), '8');
+        strictEqual(!isNullOrUndefined(response.header('start-time')), true);
+        strictEqual(!isNullOrUndefined(response.header('end-time')), true);
     });
 
     it('collect log lines into a tree description of trace', async() => {
@@ -149,7 +159,7 @@ describe('Zipkin', () => {
             timeTaken: 7,
             children: [upstreamA, upstreamB]
         };
-        deepEqual(ZipkinCollector(logLines, extractor), topLevel)
+        deepStrictEqual(ZipkinCollector(logLines, extractor), topLevel)
     });
 
 });

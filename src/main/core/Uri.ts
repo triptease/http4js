@@ -16,7 +16,7 @@ export interface NodeURI {
 export class Uri {
     asNativeNodeRequest: NodeURI;
     matches: KeyValues;
-    private pathParamMatchingRegex: RegExp = new RegExp(/\{(\w+)\}/g);
+    private pathParamMatchingRegex: RegExp = new RegExp(/\{(\w+)}/g);
     private pathParamCaptureTemplate: string = "([\\w\\s\-\%\&]+)";
 
 
@@ -35,7 +35,7 @@ export class Uri {
     }
 
     protocol(): string {
-        return this.asNativeNodeRequest.protocol.replace(/\:/g, "");
+        return this.asNativeNodeRequest.protocol.replace(/:/g, "");
     }
 
     withProtocol(protocol: string): Uri {
@@ -139,7 +139,7 @@ export class Uri {
         const matches: KeyValues = {};
         const path = this.path();
         const match = path.match(this.pathParamMatchingRegex) || [];
-        const pathParamNames = match.map(it => it.replace(/{|}/g, ''));
+        const pathParamNames = match.map(it => it.replace(/[{}]/g, ''));
         const pathParams: string[] = this.uriTemplateToPathParamCapturingRegex(path).exec(uri) || [];
         pathParamNames.map((name, index) => matches[name] = decodeURIComponent(pathParams[index + 1]));
         return Uri.of(this.asUriString(), matches);

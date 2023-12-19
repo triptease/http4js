@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {get, HttpServer, HttpsServer, ReqOf, Res} from '../../main';
-import {equal} from 'assert';
 import {HttpClientHandler} from '../../main/client/HttpClientHandler';
+import {strictEqual} from "node:assert";
 
 describe('HttpClientHandler', () => {
   const certs = {
@@ -30,11 +30,11 @@ describe('HttpClientHandler', () => {
 
   it('should handle http requests', async () => {
     const response = await new HttpClientHandler().handle(ReqOf('GET', 'http://localhost:3013/'));
-    equal(response.bodyString(), 'ok');
+    strictEqual(response.bodyString(), 'ok');
   });
 
   it('should handle https requests', async () => {
     const response = await new HttpClientHandler().handle(ReqOf('GET', 'https://localhost:3014/'));
-    equal(response.bodyString(), 'ok');
+    strictEqual(response.bodyString(), 'ok');
   });
 });

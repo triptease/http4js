@@ -1,6 +1,6 @@
-import {equal} from 'assert';
 import * as fs from 'fs';
 import {get, HttpsClient, HttpsServer, Method, Req, ReqOf, Res} from '../../main';
+import {strictEqual} from "node:assert";
 
 describe('httpsclient', () => {
 
@@ -37,20 +37,20 @@ describe('httpsclient', () => {
 
   it('can make a request given ReqOptions', async () => {
     const response = await HttpsClient({method: 'GET', uri: 'https://localhost:3014/'});
-    equal(response.bodyString(), 'ok');
+    strictEqual(response.bodyString(), 'ok');
   });
 
   it('posts body content to server', async () => {
     lastPost = ReqOf(Method.GET, '/');
     const response = await HttpsClient({method: 'POST', uri: 'https://localhost:3014/', body: 'some body'});
-    equal(response.bodyString(), 'ok');
-    equal(lastPost.bodyString(), 'some body');
+    strictEqual(response.bodyString(), 'ok');
+    strictEqual(lastPost.bodyString(), 'some body');
   });
 
   it('delete sends body content to server', async () => {
     lastDelete = ReqOf(Method.GET, '/');
     const response = await HttpsClient({method: 'DELETE', uri: 'https://localhost:3014/', body: 'some body'});
-    equal(response.bodyString(), 'ok');
-    equal(lastDelete.bodyString(), 'some body');
+    strictEqual(response.bodyString(), 'ok');
+    strictEqual(lastDelete.bodyString(), 'some body');
   });
 });

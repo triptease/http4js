@@ -7,8 +7,8 @@ import {Readable} from "stream";
 describe('in mem request', () => {
 
     it('is immutable', () => {
-       const request1 = ReqOf('GET', '/');
-       const request2 = request1.withHeader('tom', 'tosh');
+        const request1 = ReqOf('GET', '/');
+        const request2 = request1.withHeader('tom', 'tosh');
 
         notEqual(request1, request2);
     });
@@ -80,7 +80,7 @@ describe('in mem request', () => {
                 .withForm({name: ['tosh', 'bosh'], age: '27'})
                 .withHeader(Headers.CONTENT_TYPE, HeaderValues.FORM)
                 .bodyForm(),
-            { name: [ 'tosh', 'bosh' ], age: '27' }
+            {name: ['tosh', 'bosh'], age: '27'}
         )
     });
 
@@ -115,7 +115,10 @@ describe('in mem request', () => {
     });
 
     it('body is handle on stream if given a stream', () => {
-        const readable = new Readable({read(){}});
+        const readable = new Readable({
+            read() {
+            }
+        });
         readable.push('some body');
         readable.push(null);
         equal(
@@ -127,7 +130,10 @@ describe('in mem request', () => {
     });
 
     it('bodystring works as expected even if req body is a stream', () => {
-        const readable = new Readable({read(){}});
+        const readable = new Readable({
+            read() {
+            }
+        });
         readable.push('some body');
         readable.push(null);
         const reqWithStreamBody = ReqOf('GET', '/').withBody(readable);
@@ -146,13 +152,14 @@ describe('in mem request', () => {
     });
 
     it('decodes query string parameters', () => {
-        deepEqual(
-            ReqOf('GET', '/tom')
-                .withQuery('tom', 'tosh%20eroo')
-                .withQuery('ben', 'bosh%2Aeroo')
-                .queries,
-            {tom: 'tosh eroo', ben: 'bosh*eroo'})
+        const req = ReqOf('GET', '/tom')
+            .withQuery('tom', 'tosh%20eroo')
+            .withQuery('ben', 'bosh%2Aeroo');
+
+        equal(req.query('tom'), 'tosh eroo');
+        equal(req.query('ben'), 'bosh*eroo');
     });
+
 
     it('sets query string using object of key-values', () => {
         equal(
@@ -162,6 +169,39 @@ describe('in mem request', () => {
                 .queryString(),
             'tom=tosh&ben=bosh')
     });
+
+    it('sets query strings chained with url encoding', () => {
+        equal(
+            ReqOf('GET', '/edoid')
+                .withQuery('standard', 'standard')
+                .withQuery('requiresEncoding', '=')
+                .uri.queryString(),
+            "standard=standard&requiresEncoding=%3D"
+        )
+    })
+
+    it('sets multiple query strings at once with url encoding', () => {
+        equal(
+            ReqOf('GET', '/edoid')
+                .withQueries({
+                    standard: 'standard',
+                    requiresEncoding: '=',
+                })
+                .uri.queryString(),
+            "standard=standard&requiresEncoding=%3D"
+        )
+    })
+
+    it('does not re-encode URL encoded query parameters', () => {
+        equal(
+            ReqOf('GET', '/edoid')
+                .withQueries({
+                    doesNotNeedReEncoding: encodeURI('='),
+                })
+                .uri.queryString(),
+            "doesNotNeedReEncoding=%3D"
+        )
+    })
 
     it('extracts query params', async () => {
         const req = ReqOf('GET', '/test?tosh=rocks&bosh=pwns&losh=killer');

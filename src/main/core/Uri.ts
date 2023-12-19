@@ -1,6 +1,5 @@
-import {KeyValues} from "./HttpMessage";
-import {isNullOrUndefined} from "util";
-import {Queries} from "./HttpMessage";
+import {KeyValues, Queries} from "./HttpMessage";
+
 const URI = require('url');
 
 export interface NodeURI {
@@ -50,8 +49,9 @@ export class Uri {
 
     queryParams(): Queries {
         const queries: Queries = {};
-        if (isNullOrUndefined(this.queryString())) return queries;
-        const pairs = this.queryString().split("&");
+        let queryString = this.queryString();
+        if (queryString === null || queryString === undefined) return queries;
+        const pairs = queryString.split("&");
         pairs.map(pair => {
             const split = pair.split("=");
             const name = split[0];
@@ -73,15 +73,16 @@ export class Uri {
     }
 
     withQuery(name: string, value: string): Uri {
+        const urlEncodedValue = encodeURIComponent(decodeURIComponent(value));
         if (this.queryString() && this.queryString().length > 0) {
-            return Uri.of(`${this.asUriString()}&${name}=${value}`);
+            return Uri.of(`${this.asUriString()}&${name}=${urlEncodedValue}`);
         } else {
-            return Uri.of(`${this.asUriString()}?${name}=${value}`);
+            return Uri.of(`${this.asUriString()}?${name}=${urlEncodedValue}`);
         }
     }
 
     withQueries(queries: KeyValues): Uri {
-        return Object.keys(queries).reduce((uri :Uri, queryName: string) => (
+        return Object.keys(queries).reduce((uri: Uri, queryName: string) => (
             uri.withQuery(queryName, queries[queryName])
         ), Uri.of(this.asUriString()));
     }
@@ -140,11 +141,11 @@ export class Uri {
         const match = path.match(this.pathParamMatchingRegex) || [];
         const pathParamNames = match.map(it => it.replace(/{|}/g, ''));
         const pathParams: string[] = this.uriTemplateToPathParamCapturingRegex(path).exec(uri) || [];
-        pathParamNames.map( (name, index) => matches[name] = decodeURIComponent(pathParams[index + 1]));
+        pathParamNames.map((name, index) => matches[name] = decodeURIComponent(pathParams[index + 1]));
         return Uri.of(this.asUriString(), matches);
     }
 
-private uriTemplateToPathParamCapturingRegex(template: string): RegExp {
+    private uriTemplateToPathParamCapturingRegex(template: string): RegExp {
         return new RegExp(template.replace(
             this.pathParamMatchingRegex,
             this.pathParamCaptureTemplate)

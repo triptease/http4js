@@ -6,6 +6,10 @@ This is a fork, since the original appears unmaintained. This gets deployed into
 
 https://us-npm.pkg.dev/triptease-paid-search/tt-paid-search/
 
+To publish:
+    - Export an NPM_TOKEN that can publish to the NPM repo-  this is in 1password
+    - ./release.sh
+
 The commands I ran for publishing
 * everything under release.sh up until the `npm publish` command
 * `npm config set registry https://us-npm.pkg.dev/triptease-paid-search/tt-paid-search/`
@@ -69,6 +73,8 @@ client.handle(ReqOf(Method.GET, "https://httpbin.org/get")).then(res => console.
 ## Latest features
 
 [Full Release Notes here](https://tomshacham.github.io/http4js/Release-notes/#release-notes)
+
+### 5.1.0 Automatically URL encode query parameters
 
 ### 5.0.7 Specify void return on server.stop()
 

@@ -10,12 +10,6 @@ To publish:
     - Export an NPM_TOKEN that can publish to the NPM repo-  this is in 1password
     - ./release.sh
 
-The commands I ran for publishing
-* everything under release.sh up until the `npm publish` command
-* `npm config set registry https://us-npm.pkg.dev/triptease-paid-search/tt-paid-search/`
-* Went into the paid-search repo and ran: `yarn artifactregistry-login`
-* `npm publish` from inside the dist folder
-
 
 # >> [read the docs :)](https://tomshacham.github.io/http4js/) <<
 

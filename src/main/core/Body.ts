@@ -2,7 +2,7 @@ import {Readable} from "stream";
 import {BodyContent} from "./HttpMessage";
 
 export class Body {
-    private readStream: Readable | undefined;
+    private readonly readStream: Readable | undefined;
     private bodystring: string | undefined;
 
     constructor(data: BodyContent) {

@@ -15,7 +15,7 @@ export type BodyContent = Readable | string;
 
 export interface HttpMessage {
     headers: HeadersJson;
-    body: Body;
+    body: Body | undefined;
 
     header(name: string): string;
     withHeader(name: string, value: string): HttpMessage;
@@ -23,7 +23,7 @@ export interface HttpMessage {
     replaceAllHeaders(headers: HeadersJson): HttpMessage
     removeHeader(name: string): HttpMessage
     withBody(body: string): HttpMessage
-    bodyString(): string
+    bodyString(): string | undefined
 
 }
 

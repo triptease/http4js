@@ -114,6 +114,12 @@ describe('in mem request', () => {
             'tommy boy')
     });
 
+    it('no body by default', () => {
+        strictEqual(
+            ReqOf('GET', '/').bodyString(),
+            undefined)
+    })
+
     it('body is handle on stream if given a stream', () => {
         const readable = new Readable({
             read() {

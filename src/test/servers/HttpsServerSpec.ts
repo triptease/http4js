@@ -29,7 +29,7 @@ describe('https server', () => {
     });
 
     it('serves a post request', async() => {
-        const response = await HttpsClient(ReqOf('POST', 'https://localhost:8000/'));
+        const response = await HttpsClient(ReqOf('POST', 'https://localhost:8000/', "I'm a body!"));
         strictEqual(response.status, 200);
         strictEqual(response.bodyString(), 'hello, world!');
     });

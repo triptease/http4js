@@ -1,5 +1,5 @@
 import * as https from "https";
-import {Headers, HeadersJson, HeaderValues, Req, Res, ResOf, ReqOf} from '../';
+import {Headers, HeadersJson, HeaderValues, Req, ReqOf, Res, ResOf} from '../';
 import {Readable} from "stream";
 import {ReqOptions} from "./Client";
 
@@ -11,8 +11,8 @@ export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
     const options = req.uri.asNativeNodeRequest;
 
     const headers = req.bodyStream()
-      ? {...req.headers, [Headers.TRANSFER_ENCODING]: HeaderValues.CHUNKED}
-      : req.headers;
+        ? {...req.headers, [Headers.TRANSFER_ENCODING]: HeaderValues.CHUNKED}
+        : req.headers;
 
     const reqOptions = {
         ...options,
@@ -21,9 +21,12 @@ export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
     };
 
     // type system needs a hand
-    const promise: Promise<Res> = new Promise(resolve => {
+    return new Promise(resolve => {
         let clientRequest = https.request(reqOptions, (res) => {
-            const inStream = new Readable({ read() {} });
+            const inStream = new Readable({
+                read() {
+                }
+            });
             res.on('error', (err: any) => {
                 console.error(err);
             }).on('data', (chunk: Buffer) => {
@@ -33,9 +36,10 @@ export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
                 return resolve(ResOf(res.statusCode, inStream, res.headers as HeadersJson));
             });
         });
-        clientRequest.write(req.bodyString());
+        const body = req.bodyString();
+        if (body !== undefined) {
+            clientRequest.write(body);
+        }
         clientRequest.end();
     });
-
-    return promise;
 }

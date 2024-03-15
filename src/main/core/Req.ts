@@ -1,6 +1,16 @@
 import {Uri} from "./Uri";
 import {Headers, HeaderValues} from "./Headers";
-import {HttpMessage, HeadersJson, KeyValues, FormField, BodyContent, FormJson, Queries, QueryField, PathParams} from "./HttpMessage";
+import {
+    BodyContent,
+    FormField,
+    FormJson,
+    HeadersJson,
+    HttpMessage,
+    KeyValues,
+    PathParams,
+    Queries,
+    QueryField
+} from "./HttpMessage";
 import {Body} from "./Body";
 import {Readable} from "stream";
 import {Form} from "./Form";
@@ -10,13 +20,13 @@ export class Req implements HttpMessage {
     uri: Uri;
     method: string;
     headers: HeadersJson;
-    body: Body;
+    body: Body | undefined;
     queries: Queries = {};
     pathParams: KeyValues = {};
 
     constructor(method: string,
                 uri: Uri | string,
-                body: Body | BodyContent = '',
+                body: Body | BodyContent | undefined = undefined,
                 headers: Headers | HeadersJson = {},
                 pathParams: PathParams = {}
     ) {
@@ -29,9 +39,10 @@ export class Req implements HttpMessage {
         }
         if (typeof body === 'string' || body instanceof Readable) {
             this.body = Body.of(body);
-        } else {
+        } else if (body !== undefined) {
             this.body = body;
         }
+
         this.headers = headers instanceof Headers ? headers.asObject() : headers;
         this.queries = this.uri.queryParams();
         this.pathParams = pathParams;
@@ -85,16 +96,16 @@ export class Req implements HttpMessage {
         return Form.of(this.bodyForm()).field(name);
     }
 
-    bodyString(): string {
-        return this.body.bodyString() || '';
+    bodyString(): string | undefined {
+        return this.body?.bodyString();
     }
 
     bodyStream(): Readable | undefined {
-        return this.body.bodyStream();
+        return this.body?.bodyStream();
     }
 
     bodyForm(): FormJson {
-        return Form.fromBodyString(this.bodyString()).asObject();
+        return Form.fromBodyString(this.bodyString() ?? '').asObject();
     }
 
     withPathParamsFromTemplate(template: string): Req {
@@ -116,8 +127,8 @@ export class Req implements HttpMessage {
 }
 
 export function ReqOf(method: string,
-                    uri: Uri | string,
-                    body: Body | BodyContent = '',
-                    headers = {}): Req {
+                      uri: Uri | string,
+                      body: Body | BodyContent | undefined = undefined,
+                      headers = {}): Req {
     return new Req(method, uri, body, headers);
 }

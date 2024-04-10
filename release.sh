@@ -7,8 +7,6 @@ rm -rf dist && \
 cp -r src/main dist && \
 cp package.json tsconfig.json README.md dist && \
 pushd dist && \
-npm config set registry https://us-npm.pkg.dev/triptease-paid-search/tt-paid-search/ && \
-yarn artifactregistry-login && \
-npm publish && \
+npm publish --access public && \
 popd && \
 rm -r dist

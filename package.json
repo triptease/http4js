@@ -1,5 +1,5 @@
 {
-  "name": "@triptease/http4js",
+  "name": "@triptease-paid-search/http4js",
   "version": "6.0.0",
   "description": "A lightweight HTTP toolkit",
   "main": "index.js",

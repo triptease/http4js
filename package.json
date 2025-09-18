@@ -1,6 +1,6 @@
 {
   "name": "@triptease-paid-search/http4js",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "A lightweight HTTP toolkit",
   "main": "index.js",
   "types": "index.d.ts",
@@ -9,6 +9,7 @@
     "yarn": "1.x.x",
     "npm": "yarn"
   },
+  "exports": ["./src/**/*.ts"],
   "scripts": {
     "build": "tsc",
     "test": "tsc; mocha --require ts-node/register 'src/{test,ssl}/**/*.ts'",

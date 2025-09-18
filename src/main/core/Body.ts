@@ -1,5 +1,5 @@
 import {Readable} from "stream";
-import {BodyContent} from "./HttpMessage";
+import {BodyContent} from "./HttpMessage.js";
 
 export class Body {
     private readonly readStream: Readable | undefined;

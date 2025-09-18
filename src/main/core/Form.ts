@@ -1,4 +1,4 @@
-import {FormJson, FormField} from "./HttpMessage";
+import {FormJson, FormField} from "./HttpMessage.js";
 
 export class Form {
     private form: FormJson;

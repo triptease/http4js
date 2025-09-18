@@ -1,4 +1,4 @@
-import {Form} from "../../main/core/Form";
+import {Form} from "../../main/index.js";
 import {deepStrictEqual} from "assert";
 import {strictEqual} from "node:assert";
 

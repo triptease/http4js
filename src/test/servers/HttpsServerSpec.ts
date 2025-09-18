@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import {get, HttpsClient, HttpsServer, ReqOf, ResOf} from "../../main";
+import {get, HttpsClient, HttpsServer, ReqOf, ResOf} from "../../main/index.js";
 import {strictEqual} from "node:assert";
 
 describe('https server', () => {
@@ -15,8 +15,10 @@ describe('https server', () => {
         .withPost('/', async() => ResOf(200, 'hello, world!'))
         .asServer(internalServer);
 
-    before(() => {
-        require('ssl-root-cas')
+    before(async () => {
+      // @ts-ignore
+        const sslRootCas = await import('ssl-root-cas');
+        sslRootCas.default
             .inject()
             .addFile('src/ssl/my-root-ca.cert.pem');
         routing.start();

@@ -1,4 +1,4 @@
-import {get, HttpClient, HttpServer, ReqOf, ResOf} from "../../main";
+import {get, HttpClient, HttpServer, ReqOf, ResOf} from "../../main/index.js";
 import {strictEqual} from "node:assert";
 
 describe('requiring http4js from index export file', () => {
@@ -19,7 +19,7 @@ describe('requiring http4js from index export file', () => {
     it('make an http request', async () => {
         server.start();
         const res = await HttpClient(ReqOf('GET', `http://localhost:${port}/`));
-        server.stop();
+        await server.stop();
         strictEqual(res.bodyString(), 'ok')
     });
 });

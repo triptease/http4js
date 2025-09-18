@@ -1,5 +1,5 @@
 import {deepStrictEqual, notStrictEqual} from "assert";
-import {Res, ResOf} from "../../main";
+import {Res, ResOf} from "../../main/index.js";
 import {Readable} from "stream";
 import {strictEqual} from "node:assert";
 

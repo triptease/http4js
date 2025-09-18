@@ -14,7 +14,7 @@ import {
     ResOf,
     route,
     routes
-} from '../../main';
+} from '../../main/index.js';
 import {Readable} from "stream";
 import {strictEqual} from "node:assert";
 
@@ -73,13 +73,14 @@ describe('routing', async () => {
         const response = await get('/test', async() => ResOf(200))
             .withHandler('GET', '/nest', async() => ResOf(200, 'nested'))
             .withFilter((handler: HttpHandler | Handler) => {
-                return asHandler((req: Req) => {
+                return asHandler(async (req: Req) => {
                     return asHandler(handler).handle(req).then(response => response.withHeader('a', 'filter1'));
                 })
             })
             .withFilter((handler: HttpHandler | Handler) => {
-                return asHandler((req: Req) => {
-                    return asHandler(handler).handle(req).then(response => response.withHeader('another', 'filter2'));
+                return asHandler(async (req: Req) => {
+                  const response = await asHandler(handler).handle(req);
+                  return response.withHeader('another', 'filter2');
                 })
             })
             .serve(ReqOf('GET', '/nest'));
@@ -103,7 +104,7 @@ describe('routing', async () => {
 
     it('can add stuff to request using filters', async () => {
         const response = await get('/', async(req) => {
-            return ResOf(200, req.header('pre-filter' || 'hello, world!'));
+            return ResOf(200, req.header('pre-filter') || req.header('hello, world!'));
         }).withFilter((handler) => asHandler(async(req) => {
             return asHandler(handler).handle(req.withHeader('pre-filter', 'hello from pre-filter'))
         }))

@@ -1,4 +1,4 @@
-import {Headers} from "../../main";
+import {Headers} from "../../main/index.js";
 import {deepStrictEqual} from "assert";
 import {strictEqual} from "node:assert";
 

@@ -1,10 +1,10 @@
-import {Res, ResOf} from './Res';
-import {asHandler, Handler, HeadersJson, HttpHandler} from './HttpMessage';
-import {Req} from './Req';
-import {Filter} from './Filters';
-import {Http4jsServer} from '../servers/Server';
-import {HttpClient} from '../client/HttpClient';
-import {HttpServer} from '../servers/NativeServer';
+import {Res, ResOf} from './Res.js';
+import {asHandler, Handler, HeadersJson, HttpHandler} from './HttpMessage.js';
+import {Req} from './Req.js';
+import {Filter} from './Filters.js';
+import {Http4jsServer} from '../servers/Server.js';
+import {HttpClient} from '../client/HttpClient.js';
+import {HttpServer} from '../servers/NativeServer.js';
 
 export type MountedHttpHandler = { path: string, method: string, handler: Handler, headers: HeadersJson, name: string }
 export type DescribingHttpHandler = { path: string, method: string, headers: HeadersJson, name: string }

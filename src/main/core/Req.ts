@@ -1,5 +1,5 @@
-import {Uri} from "./Uri";
-import {Headers, HeaderValues} from "./Headers";
+import {Uri} from "./Uri.js";
+import {Headers, HeaderValues} from "./Headers.js";
 import {
     BodyContent,
     FormField,
@@ -10,10 +10,10 @@ import {
     PathParams,
     Queries,
     QueryField
-} from "./HttpMessage";
-import {Body} from "./Body";
+} from "./HttpMessage.js";
+import {Body} from "./Body.js";
 import {Readable} from "stream";
-import {Form} from "./Form";
+import {Form} from "./Form.js";
 
 export class Req implements HttpMessage {
 

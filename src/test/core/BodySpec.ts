@@ -1,4 +1,4 @@
-import {Body} from '../../main/core/Body';
+import {Body} from '../../main/index.js';
 import {Readable} from 'stream';
 import {strictEqual} from "node:assert";
 

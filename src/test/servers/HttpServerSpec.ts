@@ -1,9 +1,19 @@
-import {Filters, get, Headers, HeaderValues, HttpClient, NativeHttpServer, Req, ReqOf, ResOf} from "../../main";
 import {deepStrictEqual} from "assert";
 import {Readable} from "stream";
 import * as zlib from 'zlib';
 import * as fs from 'fs';
 import {strictEqual} from "node:assert";
+import {
+  Filters,
+  get,
+  Headers,
+  HeaderValues,
+  HttpClient,
+  NativeHttpServer,
+  Req,
+  ReqOf,
+  ResOf
+} from "../../main/index.js";
 
 describe("native node over the wire", () => {
 

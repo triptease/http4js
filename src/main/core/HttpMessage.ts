@@ -1,6 +1,6 @@
-import {Res} from "./Res";
-import {Req} from "./Req";
-import {Body} from "./Body";
+import {Res} from "./Res.js";
+import {Req} from "./Req.js";
+import {Body} from "./Body.js";
 import {Readable} from "stream";
 
 export type KeyValues = {[key:string]: string};

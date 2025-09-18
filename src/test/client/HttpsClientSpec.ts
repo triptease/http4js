@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {get, HttpsClient, HttpsServer, Method, Req, ReqOf, Res} from '../../main';
+import {get, HttpsClient, HttpsServer, Method, Req, ReqOf, Res} from '../../main/index.js';
 import {strictEqual} from "node:assert";
 
 describe('httpsclient', () => {
@@ -24,8 +24,10 @@ describe('httpsclient', () => {
     })
     .asServer(HttpsServer(3014, certs));
 
-  before(() => {
-    require('ssl-root-cas')
+  before(async() => {
+    // @ts-ignore
+    const sslRootCas = await import('ssl-root-cas');
+    sslRootCas.default
       .inject()
       .addFile('src/ssl/my-root-ca.cert.pem');
     server.start();

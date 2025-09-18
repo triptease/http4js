@@ -1,5 +1,5 @@
 import {deepStrictEqual, notStrictEqual} from "assert";
-import {Uri} from "../../main";
+import {Uri} from "../../main/index.js";
 import {strictEqual} from "node:assert";
 
 describe("uri", () => {

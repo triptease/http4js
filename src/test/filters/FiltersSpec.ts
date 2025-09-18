@@ -1,9 +1,9 @@
-import {debugFilterBuilder, Filters, get, Headers, HttpServer, Req, ReqOf, ResOf, routes} from "../../main";
+import {debugFilterBuilder, Filters, get, Headers, HttpServer, Req, ReqOf, ResOf, routes} from "../../main/index.js";
 import * as zlib from 'zlib';
 import * as fs from 'fs';
 import {strictEqual} from "node:assert";
 
-const { Readable } = require('stream');
+import {Readable} from 'stream';
 
 describe("Built in filters", () => {
 
@@ -69,7 +69,7 @@ describe("Built in filters", () => {
       removeFile('./foo');
 
       response.bodyStream()!.pipe(fs.createWriteStream('./foo'));
-      await new Promise(res => setTimeout(() => res(), 100));
+      await new Promise<void>(res => setTimeout(() => res(), 100));
       const message = fs.readFileSync('./foo', 'utf-8');
 
       strictEqual(message, 'ungzipped response');

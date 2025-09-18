@@ -1,4 +1,4 @@
-import {HeadersJson} from "./HttpMessage";
+import {HeadersJson} from "./HttpMessage.js";
 
 export class Headers {
     private headers: HeadersJson;

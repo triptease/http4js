@@ -1,4 +1,4 @@
-import {Routing} from "../core/Routing";
+import {Routing} from "../core/Routing.js";
 import * as http from 'http';
 import * as https from 'https';
 

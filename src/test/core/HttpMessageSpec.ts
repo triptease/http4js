@@ -1,4 +1,4 @@
-import {asHandler, Method, Req, ReqOf, ResOf} from '../../main';
+import {asHandler, Method, Req, ReqOf, ResOf} from '../../main/index.js';
 import {strictEqual} from "node:assert";
 
 describe('HttpMessage', () => {

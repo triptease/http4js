@@ -1,7 +1,7 @@
-import {BodyContent, HeadersJson, HttpMessage} from "./HttpMessage";
-import {Body} from "./Body";
+import {BodyContent, HeadersJson, HttpMessage} from "./HttpMessage.js";
+import {Body} from "./Body.js";
 import {Readable} from "stream";
-import {Headers} from "./Headers";
+import {Headers} from "./Headers.js";
 
 export class Res implements HttpMessage {
     headers: HeadersJson;

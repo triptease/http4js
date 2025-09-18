@@ -1,11 +1,11 @@
-import {BodyContent, Handler, HeadersJson, HttpHandler} from '../core/HttpMessage';
-import {Req} from "../core/Req";
-import {HttpClient} from "./HttpClient";
-import {ZipkinHeaders} from "../zipkin/Zipkin";
-import {Headers} from "../core/Headers";
-import {Body} from "../core/Body";
-import {Uri} from "../core/Uri";
-import {asHandler, Filters} from '..';
+import {BodyContent, Handler, HeadersJson, HttpHandler} from '../core/HttpMessage.js';
+import {Req} from "../core/Req.js";
+import {HttpClient} from "./HttpClient.js";
+import {ZipkinHeaders} from "../zipkin/Zipkin.js";
+import {Headers} from "../core/Headers.js";
+import {Body} from "../core/Body.js";
+import {Uri} from "../core/Uri.js";
+import {asHandler, Filters} from '../index.js';
 
 
 export interface ReqOptions {

@@ -15,11 +15,11 @@ import {
     zipkinFilterBuilder,
     ZipkinHeaders,
     ZipkinSpan
-} from '../../main';
+} from '../../main/index.js';
 import {deepStrictEqual} from 'assert';
 import {isNullOrUndefined} from 'util';
-import {FakeClock} from '../clock/FakeClock';
-import {DeterministicIdGenerator} from './DeterministicIdGenerator';
+import {FakeClock} from '../clock/FakeClock.js';
+import {DeterministicIdGenerator} from './DeterministicIdGenerator.js';
 import {strictEqual} from "node:assert";
 
 const upstream1BaseUrl = 'http://localhost:3032';

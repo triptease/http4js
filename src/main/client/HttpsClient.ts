@@ -1,7 +1,7 @@
 import * as https from "https";
-import {Headers, HeadersJson, HeaderValues, Req, ReqOf, Res, ResOf} from '../';
+import {Headers, HeadersJson, HeaderValues, Req, ReqOf, Res, ResOf} from '../index.js';
 import {Readable} from "stream";
-import {ReqOptions} from "./Client";
+import {ReqOptions} from "./Client.js";
 
 export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
     const req = request instanceof Req

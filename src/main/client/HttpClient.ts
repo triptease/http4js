@@ -1,10 +1,10 @@
 import * as http from "http";
 import {IncomingMessage} from "http";
-import {Res, ResOf} from "../core/Res";
-import {Req, ReqOf} from "../core/Req";
-import {Headers, HeaderValues} from "../core/Headers";
-import {HeadersJson} from "../core/HttpMessage";
-import {ReqOptions} from "./Client";
+import {Res, ResOf} from "../core/Res.js";
+import {Req, ReqOf} from "../core/Req.js";
+import {Headers, HeaderValues} from "../core/Headers.js";
+import {HeadersJson} from "../core/HttpMessage.js";
+import {ReqOptions} from "./Client.js";
 import {Readable} from "stream";
 
 export function HttpClient(request: Req | ReqOptions): Promise<Res> {

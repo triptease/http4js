@@ -1,4 +1,4 @@
-import {Certs, NativeServer} from "./NativeServer";
+import {Certs, NativeServer} from "./NativeServer.js";
 
 export class NativeHttpsServer extends NativeServer {
     constructor(port: number, certs: Certs) {

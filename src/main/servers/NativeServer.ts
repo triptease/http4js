@@ -1,9 +1,9 @@
 import * as http from "http";
 import {IncomingMessage, ServerResponse} from "http";
 import * as https from "https";
-import {Routing} from "../core/Routing";
-import {ReqOf} from "../core/Req";
-import {Http4jsServer} from "./Server";
+import {Routing} from "../core/Routing.js";
+import {ReqOf} from "../core/Req.js";
+import {Http4jsServer} from "./Server.js";
 import {Readable} from "stream";
 
 export type Certs = { key: Buffer; cert: Buffer; ca: Buffer };

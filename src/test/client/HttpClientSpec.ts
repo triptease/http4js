@@ -1,4 +1,4 @@
-import {get, HttpClient, HttpServer, Method, Req, ReqOf, Res} from '../../main';
+import {get, HttpClient, HttpServer, Method, Req, ReqOf, Res} from '../../main/index.js';
 import {strictEqual} from "node:assert";
 
 describe('httpclient', () => {

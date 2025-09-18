@@ -1,4 +1,4 @@
-import {asHandler, Client, Filters, get, Headers, HttpClient, HttpServer, Req, ReqOf, ResOf} from '../../main';
+import {asHandler, Client, Filters, get, Headers, HttpClient, HttpServer, Req, ReqOf, ResOf} from '../../main/index.js';
 import {deepStrictEqual} from "assert";
 import {Readable} from "stream";
 import * as zlib from "zlib";

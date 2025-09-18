@@ -1,4 +1,4 @@
-import {IdGenerator} from "../../main/zipkin/Zipkin";
+import {IdGenerator} from "../../main/index.js";
 
 export class DeterministicIdGenerator implements IdGenerator {
     private counter: number = 0;

@@ -1,9 +1,9 @@
-import {Req} from "./Req";
-import {asHandler, Handler, HeadersJson, HttpHandler} from './HttpMessage';
-import {Res} from "./Res";
-import {IdGenerator, ZipkinHeaders, ZipkinIdGenerator} from "../zipkin/Zipkin";
-import {Clock} from "./Clock";
-import {Headers} from "./Headers";
+import {Req} from "./Req.js";
+import {asHandler, Handler, HeadersJson, HttpHandler} from './HttpMessage.js';
+import {Res} from "./Res.js";
+import {IdGenerator, ZipkinHeaders, ZipkinIdGenerator} from "../zipkin/Zipkin.js";
+import {Clock} from "./Clock.js";
+import {Headers} from "./Headers.js";
 import * as zlib from "zlib";
 
 export type Filter = (handler: Handler | HttpHandler) => Handler

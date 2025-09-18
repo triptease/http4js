@@ -1,6 +1,6 @@
 {
   "name": "@triptease-paid-search/http4js",
-  "version": "7.0.2",
+  "version": "7.0.2.1",
   "description": "A lightweight HTTP toolkit",
   "main": "index.js",
   "types": "index.d.ts",
@@ -11,7 +11,10 @@
   },
   "exports": {
     ".": "./src/main/index.js",
-    "./*": "./src/main/*"
+    "./core/*": "./src/main/core/*",
+    "./client/*": "./src/main/client/*",
+    "./servers/*": "./src/main/servers/*",
+    "./zipkin/*": "./src/main/zipkin/*"
   },
   "scripts": {
     "build": "tsc",

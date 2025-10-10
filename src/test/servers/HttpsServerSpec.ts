@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import {get, HttpsClient, HttpsServer, ReqOf, ResOf} from "../../main/index.js";
 import {strictEqual} from "node:assert";
+import {afterAll, beforeAll, describe, it} from 'vitest'
 
 describe('https server', () => {
 
@@ -15,7 +16,7 @@ describe('https server', () => {
         .withPost('/', async() => ResOf(200, 'hello, world!'))
         .asServer(internalServer);
 
-    before(async () => {
+    beforeAll(async () => {
       // @ts-ignore
         const sslRootCas = await import('ssl-root-cas');
         sslRootCas.default

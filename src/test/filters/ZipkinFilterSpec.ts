@@ -21,6 +21,7 @@ import {isNullOrUndefined} from 'util';
 import {FakeClock} from '../clock/FakeClock.js';
 import {DeterministicIdGenerator} from './DeterministicIdGenerator.js';
 import {strictEqual} from "node:assert";
+import {afterAll, beforeAll, describe, it} from 'vitest'
 
 const upstream1BaseUrl = 'http://localhost:3032';
 const upstream2BaseUrl = 'http://localhost:3033';
@@ -84,14 +85,14 @@ const moreUpstream = get('/', async() => ResOf())
 
 describe('Zipkin', () => {
 
-    before(() => {
+    beforeAll(() => {
         topLevelRequestRoutes.start();
         upstream1.start();
         upstream2.start();
         moreUpstream.start();
     });
 
-    after(() => {
+    afterAll(() => {
         topLevelRequestRoutes.stop();
         upstream1.stop();
         upstream2.stop();

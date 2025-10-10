@@ -3,6 +3,7 @@ import {deepStrictEqual, notStrictEqual} from 'assert';
 import {Headers, HeaderValues, ReqOf} from '../../main/index.js';
 import {Readable} from "stream";
 import {strictEqual} from "node:assert";
+import { describe, it} from 'vitest'
 
 describe('in mem request', () => {
 

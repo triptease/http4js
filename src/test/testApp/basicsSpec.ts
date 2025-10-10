@@ -1,5 +1,6 @@
 import {get, HttpClient, HttpServer, ReqOf, ResOf} from "../../main/index.js";
 import {strictEqual} from "node:assert";
+import { describe, it} from 'vitest'
 
 describe('requiring http4js from index export file', () => {
     const port = 4001;

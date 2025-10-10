@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import {get, HttpServer, HttpsServer, ReqOf, Res} from '../../main/index.js';
 import {HttpClientHandler} from '../../main/client/HttpClientHandler.js';
 import {strictEqual} from "node:assert";
+import {afterAll, beforeAll, describe, it} from 'vitest'
 
 describe('HttpClientHandler', () => {
   const certs = {
@@ -15,7 +16,7 @@ describe('HttpClientHandler', () => {
   const httpsServer = get('/', async () => Res.OK('ok'))
     .asServer(HttpsServer(3014, certs));
 
-  before(async() => {
+  beforeAll(async() => {
     // @ts-ignore
     const sslRootCas = await import('ssl-root-cas');
     sslRootCas.default
@@ -25,9 +26,9 @@ describe('HttpClientHandler', () => {
     httpsServer.start();
   });
 
-  after(() => {
-    httpServer.stop();
-    httpsServer.stop();
+  afterAll(async () => {
+    await httpServer.stop();
+    await httpsServer.stop();
   });
 
   it('should handle http requests', async () => {

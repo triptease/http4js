@@ -3,6 +3,8 @@ import {deepStrictEqual} from "assert";
 import {Readable} from "stream";
 import * as zlib from "zlib";
 import {strictEqual} from "node:assert";
+import {afterAll, beforeAll, describe, it} from 'vitest'
+
 
 describe('client', () => {
   const server = get('/', async (req: Req) => ResOf(200, JSON.stringify(req.headers)))
@@ -11,11 +13,11 @@ describe('client', () => {
 
   const baseUrl = 'http://localhost:3045';
 
-  before(() => {
+  beforeAll(() => {
     server.start()
   });
 
-  after(() => {
+  afterAll(() => {
     server.stop()
   });
 

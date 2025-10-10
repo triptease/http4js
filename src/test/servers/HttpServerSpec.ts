@@ -14,6 +14,7 @@ import {
   ReqOf,
   ResOf
 } from "../../main/index.js";
+import {afterAll, beforeAll, describe, it} from 'vitest'
 
 describe("native node over the wire", () => {
 
@@ -43,7 +44,7 @@ describe("native node over the wire", () => {
           .withFilter(Filters.GZIP)
         .asServer(new NativeHttpServer(port));
 
-    before(() => {
+    beforeAll(() => {
         server.start();
     });
 

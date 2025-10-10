@@ -1,5 +1,6 @@
 import {asHandler, Method, Req, ReqOf, ResOf} from '../../main/index.js';
 import {strictEqual} from "node:assert";
+import {describe, it} from 'vitest'
 
 describe('HttpMessage', () => {
   it('converts httpHandler to handler interface', async () => {

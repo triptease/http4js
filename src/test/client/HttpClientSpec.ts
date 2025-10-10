@@ -1,5 +1,6 @@
 import {get, HttpClient, HttpServer, Method, Req, ReqOf, Res} from '../../main/index.js';
 import {strictEqual} from "node:assert";
+import {afterAll, beforeAll, describe, it} from 'vitest'
 
 describe('httpclient', () => {
   let lastPost: Req;
@@ -16,11 +17,11 @@ describe('httpclient', () => {
     })
     .asServer(HttpServer(3013));
 
-  before(() => {
+  beforeAll(() => {
     server.start();
   });
 
-  after(() => {
+  afterAll(() => {
     server.stop();
   });
 

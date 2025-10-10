@@ -2,6 +2,7 @@ import {debugFilterBuilder, Filters, get, Headers, HttpServer, Req, ReqOf, ResOf
 import * as zlib from 'zlib';
 import * as fs from 'fs';
 import {strictEqual} from "node:assert";
+import { describe, it} from 'vitest'
 
 import {Readable} from 'stream';
 

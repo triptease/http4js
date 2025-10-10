@@ -1,6 +1,7 @@
 import {Body} from '../../main/index.js';
 import {Readable} from 'stream';
 import {strictEqual} from "node:assert";
+import { describe, it} from 'vitest'
 
 function streamOf(body: string) {
   const readable = new Readable({read(){}});

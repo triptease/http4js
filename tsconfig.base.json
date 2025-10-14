@@ -10,7 +10,11 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": false,
-    "lib": ["ESNext"]
+    "lib": [
+      "ESNext"
+    ]
   },
-  "include": ["src/main/**/*"]
+  "include": [
+    "src/main/**/*"
+  ]
 }

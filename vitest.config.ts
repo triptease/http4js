@@ -1,9 +1,11 @@
-import {defineConfig} from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ['src/test/**/*Spec.ts'],
+    include: ["src/test/**/*Spec.ts"],
     fileParallelism: false,
-    typecheck: {enabled: true}
-  }
-})
+    watch: false,
+    typecheck: { enabled: true },
+  },
+});
+

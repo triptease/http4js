@@ -1,6 +1,6 @@
 {
   "name": "@triptease-paid-search/http4js",
-  "version": "7.0.4",
+  "version": "7.0.5",
   "description": "A lightweight HTTP toolkit",
   "type": "module",
   "types": "./dist/cjs/index.d.ts",
@@ -22,21 +22,55 @@
         "default": "./dist/cjs/index.js"
       }
     },
+    "./*": {
+      "import": {
+        "types": "./dist/esm/index.d.t",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
     "./core/*": {
-      "import": "./dist/esm/core/*",
-      "require": "./dist/cjs/core/*"
+      "import": {
+        "types": "./dist/esm/core/*.d.ts",
+        "default": "./dist/esm/core/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/core/*.d.ts",
+        "default": "./dist/cjs/core/*.js"
+      }
     },
     "./client/*": {
-      "import": "./dist/esm/client/*",
-      "require": "./dist/cjs/client/*"
+      "import": {
+        "types": "./dist/esm/client/*.d.ts",
+        "default": "./dist/esm/client/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/client/*.d.ts",
+        "default": "./dist/cjs/client/*.js"
+      }
     },
     "./servers/*": {
-      "import": "./dist/esm/servers/*",
-      "require": "./dist/cjs/servers/*"
+      "import": {
+        "types": "./dist/esm/servers/*.d.ts",
+        "default": "./dist/esm/servers/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/servers/*.d.ts",
+        "default": "./dist/cjs/servers/*.js"
+      }
     },
     "./zipkin/*": {
-      "import": "./dist/esm/zipkin/*",
-      "require": "./dist/cjs/zipkin/*"
+      "import": {
+        "types": "./dist/esm/zipkin/*.d.ts",
+        "default": "./dist/esm/zipkin/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/zipkin/*.d.ts",
+        "default": "./dist/cjs/zipkin/*.js"
+      }
     }
   },
   "files": [

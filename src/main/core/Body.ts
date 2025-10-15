@@ -52,7 +52,7 @@ export class Body {
     }
 
     private async readBytes(readable: Readable, numberOfBytes: number = 0): Promise<Buffer> {
-        let buf = readable.read(numberOfBytes);
+        const buf = readable.read(numberOfBytes);
         if (buf) {
             return new Promise<Buffer>(r => r(buf));
         }

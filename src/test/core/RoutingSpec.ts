@@ -417,7 +417,7 @@ describe('routing', async () => {
         const readable = new Readable({read(){}});
         readable.push('some body');
         readable.push(null);
-        const response = await post('/', async(req) => ResOf(200, req.bodyStream()!))
+        const response = await post('/', async(req) => ResOf(200, req.bodyStream()))
             .serve(ReqOf('POST', '/', readable));
         strictEqual(response.bodyStream(), readable);
     });

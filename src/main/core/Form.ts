@@ -30,12 +30,12 @@ export class Form {
         if (form[name]) {
             if (typeof form[name] === 'string') {
                 (typeof value === 'string')
-                    ? form[name] = [form[name] as string, value as string]
-                    : form[name] = [form[name] as string, ...value as string[]]
+                    ? form[name] = [form[name], value]
+                    : form[name] = [form[name], ...value]
             } else {
                 (typeof value === 'string')
-                    ? form[name] = [...form[name] as string[], value as string]
-                    : form[name] = [...form[name] as string[], ...value as string[]]
+                    ? form[name] = [...form[name], value]
+                    : form[name] = [...form[name], ...value]
             }
         } else {
             form[name] = value;
@@ -56,9 +56,9 @@ export class Form {
 
     formBodyString(): string {
         const form = {...this.form};
-        let formParts: string[] = Object.keys(this.form).reduce((bodyParts: string[], fieldName: string) => {
+        const formParts: string[] = Object.keys(this.form).reduce((bodyParts: string[], fieldName: string) => {
             typeof (form[fieldName]) === "object"
-                ? (form[fieldName] as string[]).map(value => bodyParts.push(`${fieldName}=${value}`))
+                ? (form[fieldName]).map(value => bodyParts.push(`${fieldName}=${value}`))
                 : bodyParts.push(`${fieldName}=${form[fieldName]}`);
             return bodyParts;
         }, []);

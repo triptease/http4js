@@ -19,7 +19,7 @@ describe("uri", () => {
     });
 
     it("handles encoded characters in path params", () => {
-        let uri = Uri.of("/tom/{is}");
+        const uri = Uri.of("/tom/{is}");
         const specialCharacters = [
          [':', '%3A'],
          ['/', '%2F'],

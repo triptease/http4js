@@ -14,6 +14,7 @@ import {
 import {Body} from "./Body.js";
 import {Readable} from "stream";
 import {Form} from "./Form.js";
+import {IncomingMessage} from "http";
 
 export class Req implements HttpMessage {
 
@@ -131,4 +132,65 @@ export function ReqOf(method: string,
                       body: Body | BodyContent | undefined = undefined,
                       headers = {}): Req {
     return new Req(method, uri, body, headers);
+}
+
+export function ReqFromIncomingMessage(incomingMessage: IncomingMessage, hostname?: string): Promise<Req> {
+    return new Promise((resolve, reject) => {
+        const { headers, method, url } = incomingMessage;
+        const inStream = new Readable({ read() {} });
+
+        incomingMessage
+            .on("error", (err: Error) => {
+                reject(err);
+            })
+            .on("data", (chunk: Buffer) => {
+                inStream.push(chunk);
+            })
+            .on("end", () => {
+                inStream.push(null);
+                const finalHostname = hostname || extractHostname(incomingMessage);
+                const request = ReqOf(
+                    method!,
+                    `${finalHostname}${url}`,
+                    inStream,
+                    headers,
+                );
+                resolve(request);
+            });
+    });
+}
+
+export async function ReqFromWebRequest(request: Request): Promise<Req> {
+    const headers: HeadersJson = {};
+    request.headers.forEach((value, key) => {
+        headers[key.toLowerCase()] = value;
+    });
+
+    let body: Readable | undefined;
+    if (request.body) {
+        const reader = request.body.getReader();
+        body = new Readable({
+            async read() {
+                const { done, value } = await reader.read();
+                if (done) {
+                    this.push(null);
+                } else {
+                    this.push(Buffer.from(value));
+                }
+            }
+        });
+    }
+
+    return ReqOf(request.method, request.url, body, headers);
+}
+
+function extractHostname(req: IncomingMessage): string {
+    const validHostnameRegex = /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))*$/;
+    const hostHeader = req.headers.host;
+    const isLocalhost = (req.socket as any).localAddress === "::ffff:127.0.0.1";
+    return validHostnameRegex.test(hostHeader || "")
+        ? `http://${hostHeader}`
+        : isLocalhost
+            ? `http://localhost:${(req.socket as any).localPort}`
+            : "";
 }

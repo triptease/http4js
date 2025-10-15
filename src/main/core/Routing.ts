@@ -77,7 +77,7 @@ export class Routing {
     return;
   }
 
-  isRunning(): Boolean {
+  isRunning(): boolean {
     if (!this.server) return false;
     return this.server.isRunning()
   }

@@ -22,7 +22,7 @@ export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
 
     // type system needs a hand
     return new Promise(resolve => {
-        let clientRequest = https.request(reqOptions, (res) => {
+        const clientRequest = https.request(reqOptions, (res) => {
             const inStream = new Readable({
                 read() {
                 }

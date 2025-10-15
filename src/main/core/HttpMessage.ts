@@ -36,7 +36,7 @@ export interface Handler {
 export function asHandler(handler: HttpHandler | Handler): Handler {
   return (typeof handler) === 'function' ? new class implements Handler {
     handle(req: Req): Promise<Res> {
-      return (handler as HttpHandler)(req);
+      return (handler)(req);
     }
-  } : handler as Handler;
+  } : handler;
 }

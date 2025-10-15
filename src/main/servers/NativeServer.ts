@@ -1,89 +1,102 @@
 import * as http from "http";
-import {IncomingMessage, ServerResponse} from "http";
+import { IncomingMessage, ServerResponse } from "http";
 import * as https from "https";
-import {Routing} from "../core/Routing.js";
-import {ReqOf} from "../core/Req.js";
-import {Http4jsServer} from "./Server.js";
-import {Readable} from "stream";
+import { Routing } from "../core/Routing.js";
+import { ReqOf } from "../core/Req.js";
+import { Http4jsServer } from "./Server.js";
+import { Readable } from "stream";
 
 export type Certs = { key: Buffer; cert: Buffer; ca: Buffer };
 
 export class NativeServer implements Http4jsServer {
-    server: http.Server | https.Server;
-    port: number;
-    validHostnameRegex: RegExp = new RegExp('^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]))*$')
+  server: http.Server | https.Server;
+  port: number;
+  validHostnameRegex: RegExp = new RegExp(
+    /^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])(.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))*$/,
+  );
 
-    constructor(port: number, certs?: Certs) {
-        this.port = port;
-        this.server = certs ? https.createServer(certs) : http.createServer();
-    }
+  constructor(port: number, certs?: Certs) {
+    this.port = port;
+    this.server = certs ? https.createServer(certs) : http.createServer();
+  }
 
-    registerCatchAllHandler(routing: Routing): void {
-        this.server.on("request", (req: IncomingMessage, res: ServerResponse) => {
-            const {headers, method, url} = req;
-            const hostname = this.hostnameFrom(req);
-            const inStream = new Readable({ read() {} });
+  registerCatchAllHandler(routing: Routing): void {
+    this.server.on("request", (req: IncomingMessage, res: ServerResponse) => {
+      const { headers, method, url } = req;
+      const hostname = this.hostnameFrom(req);
+      const inStream = new Readable({ read() {} });
 
-            req.on('error', (err: any) => {
-                console.error(err);
-            }).on('data', (chunk: Buffer) => {
-                inStream.push(chunk);
-            }).on('end', () => {
-                inStream.push(null); // No more data
+      req
+        .on("error", (err: any) => {
+          console.error(err);
+        })
+        .on("data", (chunk: Buffer) => {
+          inStream.push(chunk);
+        })
+        .on("end", () => {
+          inStream.push(null); // No more data
 
-                const request = ReqOf(method!, `${hostname}${url}`, inStream, headers);
-                const response = routing.serve(request);
+          const request = ReqOf(
+            method!,
+            `${hostname}${url}`,
+            inStream,
+            headers,
+          );
+          const response = routing.serve(request);
 
-                response.then(response => {
-                    res.writeHead(response.status, response.headers);
-                    const bodyStream = response.bodyStream();
-                    if (bodyStream){
-                        bodyStream.pipe(res);
-                    } else {
-                        const bodyString = response.bodyString();
+          response
+            .then((response) => {
+              res.writeHead(response.status, response.headers);
+              const bodyStream = response.bodyStream();
+              if (bodyStream) {
+                bodyStream.pipe(res);
+              } else {
+                const bodyString = response.bodyString();
 
-                        const bodyStream = new Readable({ read() {} });
-                        bodyStream.push(bodyString);
-                        bodyStream.push(null); // No more data
-                        bodyStream.pipe(res);
-                    }
-                }).catch(rej => console.log(rej));
+                const bodyStream = new Readable({ read() {} });
+                bodyStream.push(bodyString);
+                bodyStream.push(null); // No more data
+                bodyStream.pipe(res);
+              }
             })
+            .catch((rej) => console.log(rej));
         });
-    }
+    });
+  }
 
-    async start(): Promise<void> {
-        this.server.listen(this.port);
-    }
+  async start(): Promise<void> {
+    this.server.listen(this.port);
+  }
 
-    async stop(): Promise<void> {
-        return new Promise<void>((res, rej) => {
-            this.server.close((err?: Error) => {
-                if (err) {
-                    rej(err);
-                } else {
-                    res();
-                }
-            });
-        });
-    }
-    isRunning(): Boolean{
-        return this.server.listening
-    }
+  async stop(): Promise<void> {
+    return new Promise<void>((res, rej) => {
+      this.server.close((err?: Error) => {
+        if (err) {
+          rej(err);
+        } else {
+          res();
+        }
+      });
+    });
+  }
+  isRunning(): boolean {
+    return this.server.listening;
+  }
 
-    private hostnameFrom(req: any) {
-        const hostHeader = req.headers.host;
-        const isLocalhost = req.socket.localAddress === '::ffff:127.0.0.1';
-        return this.validHostnameRegex.test(hostHeader)
-            ? `http://${hostHeader}`
-            : (isLocalhost ? `http://localhost:${req.socket.localPort}` : '');
-    }
-
+  private hostnameFrom(req: any) {
+    const hostHeader = req.headers.host;
+    const isLocalhost = req.socket.localAddress === "::ffff:127.0.0.1";
+    return this.validHostnameRegex.test(hostHeader)
+      ? `http://${hostHeader}`
+      : isLocalhost
+        ? `http://localhost:${req.socket.localPort}`
+        : "";
+  }
 }
 
 export function HttpServer(port: number): NativeServer {
-    return new NativeServer(port);
+  return new NativeServer(port);
 }
 export function HttpsServer(port: number, certs: Certs): NativeServer {
-    return new NativeServer(port, certs);
+  return new NativeServer(port, certs);
 }

@@ -48,7 +48,7 @@ export class Uri {
 
   queryParams(): Queries {
     const queries: Queries = {};
-    let queryString = this.queryString();
+    const queryString = this.queryString();
     if (queryString === null || queryString === undefined) return queries;
     const pairs = queryString.split("&");
     pairs.map(pair => {
@@ -62,8 +62,8 @@ export class Uri {
       }
       if (queries[name]) {
         queries[name] = typeof queries[name] === 'string'
-          ? [queries[name] as string, value as string]
-          : [...queries[name] as string[], value as string];
+          ? [queries[name], value]
+          : [...queries[name], value];
       } else {
         queries[name] = value;
       }

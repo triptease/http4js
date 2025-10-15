@@ -11,7 +11,7 @@ describe('https server', () => {
         ca: fs.readFileSync('src/ssl/my-root-ca.cert.pem'),
     };
 
-    let internalServer = HttpsServer(8000, certs);
+    const internalServer = HttpsServer(8000, certs);
     const routing = get('/', async() => ResOf(200, 'hello, world!'))
         .withPost('/', async() => ResOf(200, 'hello, world!'))
         .asServer(internalServer);

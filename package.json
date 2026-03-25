@@ -7,7 +7,7 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "engines": {
-    "node": ">=20.10.0 <23",
+    "node": ">=20.19.0 <23",
     "yarn": "1.x.x",
     "npm": "yarn"
   },

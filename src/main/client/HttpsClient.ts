@@ -21,7 +21,7 @@ export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
     };
 
     // type system needs a hand
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         const clientRequest = https.request(reqOptions, (res) => {
             const inStream = new Readable({
                 read() {
@@ -35,6 +35,9 @@ export async function HttpsClient(request: Req | ReqOptions): Promise<Res> {
                 inStream.push(null); // No more data
                 return resolve(ResOf(res.statusCode, inStream, res.headers as HeadersJson));
             });
+        });
+        clientRequest.on('error', (err) => {
+            reject(err);
         });
         const body = req.bodyString();
         if (body !== undefined) {

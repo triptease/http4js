@@ -1,6 +1,6 @@
 {
   "name": "@triptease-paid-search/http4js",
-  "version": "7.0.7",
+  "version": "7.0.8",
   "description": "A lightweight HTTP toolkit",
   "type": "module",
   "types": "./dist/cjs/index.d.ts",

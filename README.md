@@ -7,8 +7,8 @@ This is a fork, since the original appears unmaintained. This gets deployed into
 https://us-npm.pkg.dev/triptease-paid-search/tt-paid-search/
 
 To publish:
-    - Export an NPM_TOKEN that can publish to the NPM repo-  this is in 1password
-    - ./release.sh
+    - `gcloud auth login` (authenticate with GCP)
+    - `./release.sh`
 
 
 # >> [read the docs :)](https://tomshacham.github.io/http4js/) <<

@@ -1,11 +1,20 @@
 {
   "name": "@triptease-paid-search/http4js",
-  "version": "7.0.8",
+  "version": "7.0.9",
   "description": "A lightweight HTTP toolkit",
   "type": "module",
   "types": "./dist/cjs/index.d.ts",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
+  "typesVersions": {
+    "*": {
+      "index": ["dist/cjs/index.d.ts"],
+      "core/*": ["dist/cjs/core/*"],
+      "client/*": ["dist/cjs/client/*"],
+      "servers/*": ["dist/cjs/servers/*"],
+      "zipkin/*": ["dist/cjs/zipkin/*"]
+    }
+  },
   "engines": {
     "node": ">=20.19.0 <23",
     "yarn": "1.x.x",
@@ -24,7 +33,7 @@
     },
     "./*": {
       "import": {
-        "types": "./dist/esm/index.d.t",
+        "types": "./dist/esm/index.d.ts",
         "default": "./dist/esm/index.js"
       },
       "require": {

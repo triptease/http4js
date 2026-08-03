@@ -1,14 +1,21 @@
 # http4js
 
+> **Deprecated and archived.** `@triptease-paid-search/http4js` is no longer published
+> or maintained, and this repository is read-only.
+>
+> Nothing depends on it. Both consumers migrated to [Hono](https://hono.dev):
+> `triptease/paid-search` (TAM-3524) and `triptease/retargeting` (TAM-3453). See
+> [`docs/http4js-to-hono.md`](https://github.com/triptease/retargeting/blob/main/docs/http4js-to-hono.md)
+> in retargeting for how that migration was done.
+>
+> Use Hono for new services. Published versions up to 7.0.9 remain in the registry
+> below, but will not receive fixes, including security fixes.
+
 A lightweight HTTP framework for Typescript / JS, with zero dependencies
 
-This is a fork, since the original appears unmaintained. This gets deployed into:
+This is a fork, since the original appears unmaintained. This was deployed into:
 
 https://us-npm.pkg.dev/triptease-paid-search/tt-paid-search/
-
-To publish:
-    - `gcloud auth login` (authenticate with GCP)
-    - `./release.sh`
 
 
 # >> [read the docs :)](https://tomshacham.github.io/http4js/) <<
